@@ -8,6 +8,8 @@ const outputElements = (elements: Element[], type: string): string[] => {
   });
 };
 
+let chart: any = null;
+
 export const Flowdiagram = (props: FlowdiagramProps) => {
   const { conditions, operations, config, styles, onClick } = props;
 
@@ -19,6 +21,10 @@ export const Flowdiagram = (props: FlowdiagramProps) => {
   (window as any).onClickHandler = onClickHandler;
 
   useEffect(() => {
+    if (chart && chart.clean) {
+      chart.clean();
+    }
+
     const conds = outputElements(conditions, 'condition');
     const ops = outputElements(operations, 'operation');
 
@@ -34,13 +40,7 @@ export const Flowdiagram = (props: FlowdiagramProps) => {
       return `${item.id}(${direction})->${end}`;
     });
 
-    console.log(conds);
-    console.log(ops);
-
-    console.log(condsConnections);
-    console.log(opsConnections);
-
-    const chart = flowchart.parse(`
+    chart = flowchart.parse(`
       start=>start: ${config?.startText || 'start'}:$onClickHandler
       end=>end: ${config?.endText || 'end'}:$onClickHandler
 
