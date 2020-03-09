@@ -12,13 +12,13 @@ export interface Element {
 
 export interface Condition extends Element {
   connections: {
-    yes: Connection;
-    no: Connection;
+    yes?: Connection | null;
+    no?: Connection | null;
   };
 }
 
 export interface Operation extends Element {
-  connection: Connection | null;
+  connection?: Connection | null;
 }
 
 export interface FlowdiagramConfig {

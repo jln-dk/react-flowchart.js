@@ -3,9 +3,9 @@ import flowchart from 'flowchart.js';
 import { FlowdiagramProps, Element } from './types';
 
 const outputElements = (elements: Element[], type: string): string[] => {
-  return elements.map(item => {
-    return `${item.id}=>${type}: ${item.label}:$onClickHandler`;
-  });
+  return elements.map(
+    element => `${element.id}=>${type}: ${element.label}:$onClickHandler`
+  );
 };
 
 let chart: any = null;
@@ -29,8 +29,12 @@ export const Flowdiagram = (props: FlowdiagramProps) => {
     const ops = outputElements(operations, 'operation');
 
     const condsConnections = conditions.map(item => {
-      const yes = `${item.id}(yes, ${item.connections.yes.position})->${item.connections.yes.id}`;
-      const no = `${item.id}(no, ${item.connections.no.position})->${item.connections.no.id}`;
+      const yes = item.connections.yes
+        ? `${item.id}(yes, ${item.connections.yes.position})->${item.connections.yes.id}`
+        : '';
+      const no = item.connections.no
+        ? `${item.id}(no, ${item.connections.no.position})->${item.connections.no.id}`
+        : '';
       return yes + '\n' + no;
     });
 
