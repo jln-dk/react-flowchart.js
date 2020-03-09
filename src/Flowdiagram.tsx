@@ -39,14 +39,14 @@ export const Flowdiagram = (props: FlowdiagramProps) => {
     });
 
     const opsConnections = operations.map(item => {
-      const direction = item.connection ? 'right' : 'bottom';
-      const end = item.connection ? item.connection.id : 'end';
-      return `${item.id}(${direction})->${end}`;
+      if (item.connection) {
+        return `${item.id}(bottom)->${item.connection.id}`;
+      }
+      return '';
     });
 
     chart = flowchart.parse(`
       start=>start: ${config?.startText || 'start'}:$onClickHandler
-      end=>end: ${config?.endText || 'end'}:$onClickHandler
 
       ${conds.join('\n')}
       ${ops.join('\n')}
