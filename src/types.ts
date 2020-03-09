@@ -62,7 +62,7 @@ export type Node =
   | ConditionNode
   | ParallelNode;
 
-export interface FlowdiagramConfig {
+export interface FlowchartConfig {
   lineWidth?: number;
   lineLength?: number;
   textMargin?: number;
@@ -79,9 +79,9 @@ export interface FlowdiagramConfig {
   scale?: number;
 }
 
-export interface FlowdiagramProps {
+export interface FlowchartProps {
   nodes: Node[];
-  config?: FlowdiagramConfig;
+  config?: FlowchartConfig;
   styles?: {
     [nodeType: string]: Object;
   };

@@ -1,12 +1,12 @@
 import flowchart from 'flowchart.js';
 import React, { useEffect } from 'react';
-import { FlowdiagramProps } from './types';
+import { FlowchartProps } from './types';
 import { outputNodes, outputConnections } from './utils';
 import { ONCLICK_HANDLER_NAME } from './constants';
 
 let chart: any = null;
 
-export const Flowdiagram = (props: FlowdiagramProps) => {
+export const Flowchart = (props: FlowchartProps) => {
   const { nodes, config, styles, states, onClick } = props;
 
   const internalClickHandler = (mouseEvent: MouseEvent, item: any) => {
