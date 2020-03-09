@@ -47,7 +47,7 @@ export const Flowdiagram = (props: FlowdiagramProps) => {
       ${conds.join('\n')}
       ${ops.join('\n')}
 
-      start(bottom)->${conditions[0].id}
+      ${conditions.length > 0 ? `start(bottom)->${conditions[0].id}` : ''}
       ${condsConnections.join('\n')}
       ${opsConnections.join('\n')}
     `);
