@@ -1,75 +1,58 @@
-import React, { useEffect } from 'react';
 import flowchart from 'flowchart.js';
-import { FlowdiagramProps, Element } from './types';
-
-const outputElements = (elements: Element[], type: string): string[] => {
-  return elements.map(
-    element => `${element.id}=>${type}: ${element.label}:$onClickHandler`
-  );
-};
+import React, { useEffect } from 'react';
+import { FlowdiagramProps } from './types';
+import { outputNodes, outputConnections } from './utils';
+import { ONCLICK_HANDLER_NAME } from './constants';
 
 let chart: any = null;
 
 export const Flowdiagram = (props: FlowdiagramProps) => {
-  const { conditions, operations, config, styles, onClick } = props;
+  const { nodes, config, styles, states, onClick } = props;
 
-  const onClickHandler = (mouseEvent: MouseEvent, item: any) => {
+  const internalClickHandler = (mouseEvent: MouseEvent, item: any) => {
     if (onClick) {
       onClick(item, mouseEvent);
     }
   };
-  (window as any).onClickHandler = onClickHandler;
+  (window as any)[ONCLICK_HANDLER_NAME] = internalClickHandler;
 
   useEffect(() => {
     if (chart && chart.clean) {
       chart.clean();
     }
 
-    const conds = outputElements(conditions, 'condition');
-    const ops = outputElements(operations, 'operation');
+    const nodesCode = outputNodes(nodes);
+    const connectionsCode = outputConnections(nodes);
 
-    const condsConnections = conditions.map(item => {
-      const yes = item.connections.yes
-        ? `${item.id}(yes, ${item.connections.yes.position})->${item.connections.yes.id}`
-        : '';
-      const no = item.connections.no
-        ? `${item.id}(no, ${item.connections.no.position})->${item.connections.no.id}`
-        : '';
-      return yes + '\n' + no;
-    });
-
-    const opsConnections = operations.map(item => {
-      if (item.connection) {
-        return `${item.id}(bottom)->${item.connection.id}`;
-      }
-      return '';
-    });
+    console.log(nodesCode);
+    console.log(connectionsCode);
 
     chart = flowchart.parse(`
-      start=>start: ${config?.startText || 'start'}:$onClickHandler
-
-      ${conds.join('\n')}
-      ${ops.join('\n')}
-
-      ${conditions.length > 0 ? `start(bottom)->${conditions[0].id}` : ''}
-      ${condsConnections.join('\n')}
-      ${opsConnections.join('\n')}
+      ${nodesCode}
+      ${connectionsCode}
     `);
 
     chart.drawSVG('canvas', {
       'line-width': config?.lineWidth || 2,
       'line-length': config?.lineLength || 50,
-      'text-margin': 10,
-      'font-size': 14,
-      'font-color': 'black',
-      'line-color': 'black',
-      'element-color': 'black',
-      'arrow-end': 'classic-wide-long',
-      scale: 1,
-      // style symbol types
+      'text-margin': config?.textMargin || 10,
+      'font-size': config?.fontSize || 14,
+      'font-family': config?.fontFamily || 'Helvetica',
+      'font-weight': config?.fontWeight || 'normal',
+      'font-color': config?.fontColor || 'black',
+      'line-color': config?.lineColor || 'black',
+      'element-color': config?.elementColor || 'black',
+      fill: config?.fill || 'white',
+      'yes-text': config?.yesText || 'yes',
+      'no-text': config?.noText || 'no',
+      'arrow-end': config?.arrowEnd || 'classic-wide-long',
+      scale: config?.scale || 1,
+      // nodes style
       symbols: styles,
+      // flowstate styles
+      flowstate: states,
     });
-  }, [conditions, operations, config, styles]);
+  }, [nodes, config, styles, states]);
 
   return <div id="canvas"></div>;
 };
