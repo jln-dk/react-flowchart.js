@@ -137,7 +137,7 @@ const App = () => {
 };
 ```
 
-## Props
+## Props / Config
 
 ```typescript
 interface FlowchartProps {
@@ -170,7 +170,9 @@ interface FlowchartConfig {
 }
 ```
 
-## Documentation
+Please see `./src/types.ts` for type information on the `Node` type.
+
+## Flowchart.js documentation
 
 For documentation on how flowchart.js works please check out the [README of flowchart.js](https://github.com/adrai/flowchart.js).
 
