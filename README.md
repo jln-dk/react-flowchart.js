@@ -1,6 +1,7 @@
 # react-flowchart.js
 
 [![Version](https://img.shields.io/npm/v/react-flowchart.js.svg)](https://www.npmjs.com/package/react-flowchart.js)
+[![Downloads](https://img.shields.io/npm/dm/react-flowchart.js.svg)](https://www.npmjs.com/package/react-flowchart.js)
 
 ## Overview
 
