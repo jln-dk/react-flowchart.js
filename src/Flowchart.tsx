@@ -2,9 +2,9 @@ import flowchart from 'flowchart.js';
 import React, { useEffect } from 'react';
 import { FlowchartProps } from './types';
 import { outputNodes, outputConnections } from './utils';
-import { ONCLICK_HANDLER_NAME } from './constants';
+import { CANVAS_ID, ONCLICK_HANDLER_NAME } from './constants';
 
-let chart: any = null;
+let chartElement: any = null;
 
 export const Flowchart = (props: FlowchartProps) => {
   const { nodes, config, styles, states, onClick } = props;
@@ -17,22 +17,23 @@ export const Flowchart = (props: FlowchartProps) => {
   (window as any)[ONCLICK_HANDLER_NAME] = internalClickHandler;
 
   useEffect(() => {
-    if (chart && chart.clean) {
-      chart.clean();
+    if (nodes.length <= 0) {
+      return;
+    }
+
+    if (chartElement && chartElement.clean) {
+      chartElement.clean();
     }
 
     const nodesCode = outputNodes(nodes);
     const connectionsCode = outputConnections(nodes);
 
-    console.log(nodesCode);
-    console.log(connectionsCode);
-
-    chart = flowchart.parse(`
+    chartElement = flowchart.parse(`
       ${nodesCode}
       ${connectionsCode}
     `);
 
-    chart.drawSVG('canvas', {
+    chartElement.drawSVG(CANVAS_ID, {
       'line-width': config?.lineWidth || 2,
       'line-length': config?.lineLength || 50,
       'text-margin': config?.textMargin || 10,
@@ -54,5 +55,5 @@ export const Flowchart = (props: FlowchartProps) => {
     });
   }, [nodes, config, styles, states]);
 
-  return <div id="canvas"></div>;
+  return <div id={CANVAS_ID}></div>;
 };
